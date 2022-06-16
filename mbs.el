@@ -4,11 +4,10 @@
 ;; Created date 2022-04-19 21:01:22
 
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
-;; Description: Minibuffer Stats
-;; Keyword: minibuffer stats
+;; URL: https://github.com/jcs-elpa/mbs
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "26.1"))
-;; URL: https://github.com/jcs-elpa/mbs
+;; Keywords: minibuffer stats
 
 ;; This file is NOT part of GNU Emacs.
 

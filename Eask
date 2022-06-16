@@ -2,6 +2,9 @@
          "0.1.0"
          "Minibuffer Stats")
 
+(website-url "https://github.com/jcs-elpa/mbs")
+(keywords "minibuffer" "stats")
+
 (package-file "mbs.el")
 
 (source "gnu")
