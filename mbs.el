@@ -7,7 +7,7 @@
 ;; URL: https://github.com/jcs-elpa/mbs
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "26.1"))
-;; Keywords: minibuffer stats
+;; Keywords: convenience minibuffer stats
 
 ;; This file is NOT part of GNU Emacs.
 
