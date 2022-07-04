@@ -3,7 +3,7 @@
          "Minibuffer Stats")
 
 (website-url "https://github.com/jcs-elpa/mbs")
-(keywords "minibuffer" "stats")
+(keywords "convenience" "minibuffer" "stats")
 
 (package-file "mbs.el")
 
