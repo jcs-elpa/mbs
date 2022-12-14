@@ -48,8 +48,8 @@
 (defun mbs-finding-file-p ()
   "Return non-nil if current minibuffer finding file."
   (mbs--with-minibuffer-env
-    (or (string-prefix-p "Find " prompt)
-        (string-prefix-p "Select " prompt))))
+    (and (not (mbs-M-x-p))
+         (ignore-errors (expand-file-name contents)))))
 
 ;;;###autoload
 (defun mbs-renaming-p ()
