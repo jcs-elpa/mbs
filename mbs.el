@@ -49,6 +49,7 @@
   "Return non-nil if current minibuffer finding file."
   (mbs--with-minibuffer-env
     (and (not (mbs-M-x-p))
+         (not (string-empty-p contents))
          (ignore-errors (expand-file-name contents)))))
 
 ;;;###autoload
