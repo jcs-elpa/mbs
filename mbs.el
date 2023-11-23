@@ -6,7 +6,7 @@
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/jcs-elpa/mbs
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "26.1"))
+;; Package-Requires: ((emacs "26.1") (s "1.12.0"))
 ;; Keywords: convenience minibuffer stats
 
 ;; This file is NOT part of GNU Emacs.
@@ -30,6 +30,8 @@
 ;;
 
 ;;; Code:
+
+(require 's)
 
 (defmacro mbs--with-minibuffer-env (&rest body)
   "Execute BODY with minibuffer variables."
@@ -57,6 +59,14 @@
   "Return non-nil if current minibuffer renaming."
   (mbs--with-minibuffer-env
     (string-prefix-p "New name:" prompt)))
+
+;;;###autoload
+(defun mbs-tramp-p ()
+  "Return non-nil if current minibuffer connect over tramp."
+  (mbs--with-minibuffer-env
+    (and (mbs-finding-file-p)
+         (s-contains-p ":" contents)
+         (string-prefix-p "/" contents))))
 
 (provide 'mbs)
 ;;; mbs.el ends here
