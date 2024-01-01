@@ -1,6 +1,6 @@
 ;;; mbs.el --- Minibuffer Stats  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2022  Shen, Jen-Chieh
+;; Copyright (C) 2022-2024  Shen, Jen-Chieh
 ;; Created date 2022-04-19 21:01:22
 
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
