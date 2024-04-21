@@ -33,6 +33,19 @@
 
 (require 's)
 
+(defgroup mbs nil
+  "Minibuffer Stats."
+  :prefix "mbs-"
+  :group 'convenience
+  :group 'tools
+  :link '(url-link :tag "Repository" "https://github.com/jcs-elpa/mbs"))
+
+(defconst mbs-read-file-name-commands '(read-file-name)
+  "List of command to  detect find file action.")
+
+(defvar mbs-reading-file-name-p nil
+  "Return non-nil if reading file name.")
+
 ;;
 ;;; Util
 
@@ -45,6 +58,31 @@
      ,@body))
 
 ;;
+;;; Entry
+
+(defun mbs-mode--adv-around (fnc &rest args)
+  "Advice bind FNC and ARGS."
+  (let ((mbs-reading-file-name-p t)) (apply fnc args)))
+
+(defun mbs-mode--enable ()
+  "Enable function `recentf-excl-mode'."
+  (dolist (command mbs-read-file-name-commands)
+    (advice-add command :around #'mbs-mode--adv-around)))
+
+(defun mbs-mode--disable ()
+  "Disable function `recentf-excl-mode'."
+  (dolist (command mbs-read-file-name-commands)
+    (advice-remove command #'mbs-mode--adv-around)))
+
+;;;###autoload
+(define-minor-mode mbs-mode
+  "Minor mode `mbs-mode'."
+  :global t
+  :require 'mbs-mode
+  :group 'mbs
+  (if mbs-mode (mbs-mode--enable) (mbs-mode--disable)))
+
+;;
 ;;; Core
 
 ;;;###autoload
@@ -54,12 +92,16 @@
     (string-prefix-p "M-x" prompt)))
 
 ;;;###autoload
-(defun mbs-finding-file-p ()
+(defun mbs-reading-file-name-p ()
   "Return non-nil if current minibuffer finding file."
   (mbs-with-minibuffer-env
-    (and (not (mbs-M-x-p))
-         (not (string-empty-p contents))
-         (ignore-errors (expand-file-name contents)))))
+    (or mbs-reading-file-name-p
+        (and (not (mbs-M-x-p))
+             (not (string-empty-p contents))
+             (ignore-errors (expand-file-name contents))))))
+
+;;;###autoload
+(defalias 'mbs-finding-file-p #'mbs-reading-file-name-p)
 
 ;;;###autoload
 (defun mbs-renaming-p ()
