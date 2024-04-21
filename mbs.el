@@ -33,23 +33,30 @@
 
 (require 's)
 
-(defmacro mbs--with-minibuffer-env (&rest body)
+;;
+;;; Util
+
+;;;###autoload
+(defmacro mbs-with-minibuffer-env (&rest body)
   "Execute BODY with minibuffer variables."
   (declare (indent 0) (debug t))
   `(let ((prompt (minibuffer-prompt))
          (contents (minibuffer-contents)))
      ,@body))
 
+;;
+;;; Core
+
 ;;;###autoload
 (defun mbs-M-x-p ()
   "Return non-nil if current minibuffer `M-x'."
-  (mbs--with-minibuffer-env
+  (mbs-with-minibuffer-env
     (string-prefix-p "M-x" prompt)))
 
 ;;;###autoload
 (defun mbs-finding-file-p ()
   "Return non-nil if current minibuffer finding file."
-  (mbs--with-minibuffer-env
+  (mbs-with-minibuffer-env
     (and (not (mbs-M-x-p))
          (not (string-empty-p contents))
          (ignore-errors (expand-file-name contents)))))
@@ -57,13 +64,13 @@
 ;;;###autoload
 (defun mbs-renaming-p ()
   "Return non-nil if current minibuffer renaming."
-  (mbs--with-minibuffer-env
+  (mbs-with-minibuffer-env
     (string-prefix-p "New name:" prompt)))
 
 ;;;###autoload
 (defun mbs-tramp-p ()
   "Return non-nil if current minibuffer connect over tramp."
-  (mbs--with-minibuffer-env
+  (mbs-with-minibuffer-env
     (and (mbs-finding-file-p)
          (s-contains-p ":" contents)
          (string-prefix-p "/" contents))))
