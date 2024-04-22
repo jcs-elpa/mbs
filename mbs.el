@@ -40,7 +40,8 @@
   :group 'tools
   :link '(url-link :tag "Repository" "https://github.com/jcs-elpa/mbs"))
 
-(defconst mbs-read-file-name-commands '(read-file-name)
+(defconst mbs-read-file-name-commands
+  `(,(or read-file-name-function #'read-file-name-default))
   "List of command to  detect find file action.")
 
 (defvar mbs-reading-file-name-p nil
