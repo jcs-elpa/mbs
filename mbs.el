@@ -40,10 +40,12 @@
   :group 'tools
   :link '(url-link :tag "Repository" "https://github.com/jcs-elpa/mbs"))
 
-;;
-;;; Externals
+(defconst mbs-read-file-name-commands
+  `(,(or read-file-name-function #'read-file-name-default))
+  "List of command to  detect find file action.")
 
-(defvar vertico--candidates)
+(defvar mbs-reading-file-name-p nil
+  "Return non-nil if reading file name.")
 
 ;;
 ;;; Util
@@ -57,14 +59,29 @@
      ,@body))
 
 ;;
-;;; Plugins
+;;; Entry
 
-(defun mbs--vertico-read-file-p ()
-  "Return non-nil when vertico is reading file name."
-  (when-let (((bound-and-true-p vertico-mode))
-             (name (car vertico--candidates)))
-    (or (file-exists-p name)
-        (file-exists-p (expand-file-name name)))))
+(defun mbs-mode--adv-around (fnc &rest args)
+  "Advice bind FNC and ARGS."
+  (let ((mbs-reading-file-name-p t)) (apply fnc args)))
+
+(defun mbs-mode--enable ()
+  "Enable function `recentf-excl-mode'."
+  (dolist (command mbs-read-file-name-commands)
+    (advice-add command :around #'mbs-mode--adv-around)))
+
+(defun mbs-mode--disable ()
+  "Disable function `recentf-excl-mode'."
+  (dolist (command mbs-read-file-name-commands)
+    (advice-remove command #'mbs-mode--adv-around)))
+
+;;;###autoload
+(define-minor-mode mbs-mode
+  "Minor mode `mbs-mode'."
+  :global t
+  :require 'mbs-mode
+  :group 'mbs
+  (if mbs-mode (mbs-mode--enable) (mbs-mode--disable)))
 
 ;;
 ;;; Core
@@ -79,7 +96,7 @@
 (defun mbs-reading-file-name-p ()
   "Return non-nil if current minibuffer finding file."
   (mbs-with-minibuffer-env
-    (or (mbs--vertico-read-file-p)
+    (or mbs-reading-file-name-p
         (and (not (mbs-M-x-p))
              (not (string-empty-p contents))
              (ignore-errors (expand-file-name contents))))))
