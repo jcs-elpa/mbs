@@ -1,3 +1,5 @@
+;; -*- mode: eask; lexical-binding: t -*-
+
 (package "mbs"
          "0.1.0"
          "Minibuffer Stats")
